@@ -6,13 +6,23 @@
 /*   By: bpancar <bpancar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 09:34:25 by bpancar           #+#    #+#             */
-/*   Updated: 2025/01/08 15:59:15 by bpancar          ###   ########.fr       */
+/*   Updated: 2025/03/26 05:54:07 by bpancar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <unistd.h>
 
+char *leak_check(char *s)
+{
+	if(!*s || !s || s[0] == '\n')
+	{
+		free(s);
+		return(NULL);
+	}
+	else
+		return(s);
+}
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
@@ -80,6 +90,7 @@ char	*get_next_line(int fd)
 			beforestr = ft_substr(afterstr, 0, j);
 			temp = afterstr;
 			afterstr = ft_strdup(afterstr + j);
+			afterstr = leak_check(afterstr);
 			return (free(temp), beforestr);
 		}
 	}
